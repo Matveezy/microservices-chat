@@ -24,7 +24,7 @@
 <!--        <module>files</module>-->
 <!--        <module>alerts</module>-->
 
-<!--        <module>gateway</module>-->
+        <module>gateway</module>
     </modules>
 
 
