@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>lab2</groupId>
+    <artifactId>lab2</artifactId>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+    <name>lab2</name>
+    <description>lab2</description>
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+
+    <modules>
+        <module>eureka</module>
+<!--        <module>config</module>-->
+<!--        <module>security</module>-->
+<!--        <module>user</module>-->
+<!--        <module>hotel</module>-->
+<!--        <module>wallet</module>-->
+
+<!--        <module>files</module>-->
+<!--        <module>alerts</module>-->
+
+<!--        <module>gateway</module>-->
+    </modules>
+
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.8</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/service/**</include>
+                        <include>**/validation/**</include>
+                    </includes>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
