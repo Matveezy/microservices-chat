@@ -18,6 +18,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Optional;
 
+import static com.lab2.user.util.RequestAttributeNames.*;
+
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -48,9 +50,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request)); // session and ip
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                request.setAttribute("userId", userDetails.getId());
-                request.setAttribute("username", userDetails.getUsername());
-                request.setAttribute("authorities", userDetails.getAuthorities());
+                request.setAttribute(USER_ID_ATTRIBUTE_NAME, userDetails.getId());
+                request.setAttribute(USERNAME_ATTRIBUTE_NAME, userDetails.getUsername());
+                request.setAttribute(AUTHORITY, userDetails.getAuthorities());
             }
         }
         filterChain.doFilter(request, response);

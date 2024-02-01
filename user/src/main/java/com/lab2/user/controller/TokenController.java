@@ -1,17 +1,20 @@
 package com.lab2.user.controller;
 
-import com.google.common.net.HttpHeaders;
 import com.lab2.user.dto.ValidateTokenResponse;
 import com.lab2.user.entity.Role;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/token/validate")
+@RestController
+@RequestMapping("/token")
 public class TokenController {
 
-    @GetMapping
+    @GetMapping("/validate")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<ValidateTokenResponse> validateToken(HttpServletRequest httpServletRequest) {
         String username = (String) httpServletRequest.getAttribute("username");
         if (username == null) return ResponseEntity.ok(ValidateTokenResponse.builder().isAuthenticated(false).build());
