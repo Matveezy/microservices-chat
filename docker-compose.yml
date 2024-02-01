@@ -21,6 +21,21 @@ services:
       timeout: 10s
       retries: 3
 
+  gateway:
+    build:
+      context: .
+      args:
+        service: gateway
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      eureka:
+        condition: service_healthy
+    environment:
+      - CONFIGSERVER_URI=http://config:8888
+      - EUREKA_HOST=eureka
+
   db:
     image: postgres:14
     container_name: db
