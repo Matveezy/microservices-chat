@@ -1,21 +1,24 @@
 server:
   port: 8080
-
 spring:
   cloud:
     gateway:
-#      routes:
-#        - id: security-service
-#          uri: lb://security
-#          predicates:
-#            - Path=/security/**,/api-docs/**
-#          filters:
-#            - RewritePath=/security(?<segment>/?.*), $\{segment}
-#            - TokenPreFilter
+      routes:
+        - id: user-service
+          uri: lb://user
+          predicates:
+            - Path=/user/**
+          filters:
+            - RewritePath=/user/?(?<segment>.*), /$\{segment}
+            - TokenPreFilter
       discovery:
         locator:
           enabled: true
           lower-case-service-id: true
+    config:
+      enabled: false
+  application:
+    name: gateway
 
 logging:
   level:

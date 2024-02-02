@@ -17,7 +17,7 @@
         <module>eureka</module>
 <!--        <module>config</module>-->
 <!--        <module>security</module>-->
-<!--        <module>user</module>-->
+        <module>user</module>
 <!--        <module>hotel</module>-->
 <!--        <module>wallet</module>-->
 
