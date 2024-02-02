@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
 
 @Service
@@ -27,6 +28,12 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final UserReadMapper userReadMapper;
     private final PasswordEncoder passwordEncoder;
+
+    public UserReadDto findById(Long userId) {
+        return userRepository.findById(userId)
+                .map(userReadMapper::mapToDto)
+                .orElseThrow(EntityNotFoundException::new);
+    }
 
     @Transactional
     public UserReadDto create(CreateUserDto createUserDto) {

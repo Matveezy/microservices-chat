@@ -16,9 +16,12 @@ public class TokenController {
     @GetMapping("/validate")
     @PreAuthorize("permitAll()")
     public ResponseEntity<ValidateTokenResponse> validateToken(HttpServletRequest httpServletRequest) {
+        System.out.println("VALIDATE TOKEN");
         String username = (String) httpServletRequest.getAttribute("username");
+        System.out.println("USERNAME");
         if (username == null) return ResponseEntity.ok(ValidateTokenResponse.builder().isAuthenticated(false).build());
-        Role authority = Role.valueOf(httpServletRequest.getAttribute("authority").toString());
+        String roleString = httpServletRequest.getAttribute("authority").toString().replace("[", "").replace("]", "");
+        Role authority = Role.valueOf(roleString);
         Long userId = (Long) httpServletRequest.getAttribute("userId");
         return ResponseEntity.ok(
                 ValidateTokenResponse.builder()

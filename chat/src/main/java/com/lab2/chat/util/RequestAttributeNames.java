@@ -1,4 +1,4 @@
-package com.lab2.user.util;
+package com.lab2.chat.util;
 
 import lombok.experimental.UtilityClass;
 

@@ -22,6 +22,11 @@ public class UserController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> findUserById(@PathVariable Long userId) {
+        return new ResponseEntity<>(userService.findById(userId), HttpStatus.OK);
+    }
+
     @PostMapping("/register")
     @PreAuthorize("permitAll()")
     public ResponseEntity<?> create(@RequestBody @Valid CreateUserDto request) {

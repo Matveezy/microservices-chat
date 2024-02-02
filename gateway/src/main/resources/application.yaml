@@ -1,5 +1,6 @@
 server:
   port: 8080
+
 spring:
   cloud:
     gateway:
@@ -9,12 +10,19 @@ spring:
           predicates:
             - Path=/user/**
           filters:
-            - RewritePath=/user/?(?<segment>.*), /$\{segment}
             - TokenPreFilter
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
+            - RewritePath=/user/?(?<segment>.*), /$\{segment}
+        - id: chat-service
+          uri: lb://chat
+          predicates:
+            - Path=/chat/**
+          filters:
+            - TokenPreFilter
+            - RewritePath=/chat/?(?<segment>.*), /$\{segment}
+#      discovery:
+#        locator:
+#          lower-case-service-id: true
+#          enabled: false
     config:
       enabled: false
   application:
