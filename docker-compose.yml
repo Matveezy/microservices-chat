@@ -46,8 +46,6 @@ services:
         condition: service_healthy
       db:
         condition: service_healthy
-      kafka:
-        condition: service_started
     environment:
       - CONFIGSERVER_URI=http://config:8888
       - EUREKA_HOST=eureka

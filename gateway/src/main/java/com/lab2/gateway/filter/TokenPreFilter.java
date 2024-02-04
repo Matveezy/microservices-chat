@@ -26,10 +26,13 @@ public class TokenPreFilter extends AbstractGatewayFilterFactory<TokenPreFilter.
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
+            System.out.println(routeValidator.isSecured.test(request));
             if (routeValidator.isSecured.test(request)) {
+
                 if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
                     throw new RuntimeException("Missing Authorization header");
                 }
+                System.out.println("РАБОТАЕТ ФИЛЬТР!\n\n\n\n");
                 String bearerToken = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
                 return webClientBuilder.build().get()
                         .uri("http://user/token/validate")
@@ -37,12 +40,15 @@ public class TokenPreFilter extends AbstractGatewayFilterFactory<TokenPreFilter.
                         .retrieve()
                         .bodyToMono(ValidateTokenResponse.class)
                         .map(response -> {
+                            System.out.println("РАБОТАЕТ ФИЛЬТР!\n\n\n\n");
                             System.out.println("USERID" + response.getUserId());
                             exchange.getRequest().mutate().header("userId", String.valueOf(response.getUserId()));
                             exchange.getRequest().mutate().header("username", response.getLogin());
                             exchange.getRequest().mutate().header("authority", response.getAuthority().toString());
+                            System.out.println("AUTHORITY:" + response.getAuthority().toString());
                             return exchange;
                         }).flatMap(chain::filter).onErrorResume(error -> {
+                            System.out.println("РАБОТАЕТ ОШИБКА!\n\n\n\n");
                             return Mono.error(new RuntimeException());
                         });
             }

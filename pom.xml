@@ -15,15 +15,8 @@
 
     <modules>
         <module>eureka</module>
-<!--        <module>config</module>-->
-<!--        <module>security</module>-->
+        <module>chat</module>
         <module>user</module>
-<!--        <module>hotel</module>-->
-<!--        <module>wallet</module>-->
-
-<!--        <module>files</module>-->
-<!--        <module>alerts</module>-->
-
         <module>gateway</module>
     </modules>
 

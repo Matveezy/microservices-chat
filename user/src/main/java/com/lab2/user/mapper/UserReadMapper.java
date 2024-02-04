@@ -13,7 +13,7 @@ public class UserReadMapper implements Mapper<UserReadDto, User> {
                 .id(entity.getId())
                 .email(entity.getEmail())
                 .username(entity.getUsername())
-                .email(entity.getRole().toString())
+                .email(entity.getEmail())
                 .role(entity.getRole().toString())
                 .build();
     }
