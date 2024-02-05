@@ -35,12 +35,6 @@ CREATE TABLE messages (
     creation_ts     TIMESTAMP   NOT NULL,
     sender_id       BIGINT      NOT NULL,
     chat_id         BIGINT      NOT NULL,
-    CONSTRAINT fk_message_sender_id
-        FOREIGN KEY (sender_id)
-            REFERENCES users (id),
-    CONSTRAINT fk_message_chat_id
-        FOREIGN KEY (chat_id)
-            REFERENCES chats (id)
 );
 
 CREATE SEQUENCE message_id_seq;

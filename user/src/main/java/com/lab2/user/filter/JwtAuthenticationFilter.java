@@ -3,7 +3,7 @@ package com.lab2.user.filter;
 import com.google.common.net.HttpHeaders;
 import com.lab2.user.entity.User;
 import com.lab2.user.service.JwtService;
-import com.lab2.user.service.UserService;
+import com.lab2.user.service.UserDetailsServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -15,8 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
-import java.util.Optional;
 
 import static com.lab2.user.util.RequestAttributeNames.*;
 
@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final static String BEARER = "Bearer";
 
     private final JwtService jwtService;
-    private final UserService userService;
+    private final UserDetailsServiceImpl userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, ServletException, IOException {
@@ -39,9 +39,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt = authHeader.substring(BEARER.length() + 1);
         final String username = jwtService.extractLogin(jwt);
         if (username != null) {
-            Optional<User> userByUsernameOptional = userService.findUserByUsername(username);
-            if (userByUsernameOptional.isEmpty()) throw new EntityNotFoundException();
-            User userDetails = userByUsernameOptional.get();
+            User userDetails = (User) userService.loadUserByUsername(username);
+            if (userDetails == null) throw new EntityNotFoundException();
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,

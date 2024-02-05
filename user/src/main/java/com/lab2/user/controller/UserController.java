@@ -25,32 +25,32 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserReadDto> findUserById(@PathVariable Long userId) {
-        return new ResponseEntity<>(userService.findById(userId), HttpStatus.OK);
+        return new ResponseEntity<>(userService.findById(userId).block(), HttpStatus.OK);
     }
 
     @PostMapping("/register")
     @PreAuthorize("permitAll()")
     public ResponseEntity<?> create(@RequestBody @Valid CreateUserDto request) {
-        return new ResponseEntity<>(userService.create(request), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.create(request).block(), HttpStatus.CREATED);
     }
 
     @GetMapping("/authenticate")
     @PreAuthorize("permitAll()")
     public ResponseEntity<?> authenticate(@RequestBody @Valid AuthenticationRequest authenticationRequest) {
-        return new ResponseEntity<>(authenticationService.authenticate(authenticationRequest), HttpStatus.OK);
+        return new ResponseEntity<>(authenticationService.authenticate(authenticationRequest).block(), HttpStatus.OK);
     }
 
     @PutMapping()
     @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<?> update(@RequestBody @Valid UpdateUserDto createUserDto, HttpServletRequest httpServletRequest) {
         Long userId = Long.valueOf(httpServletRequest.getAttribute(RequestAttributeNames.USER_ID_ATTRIBUTE_NAME).toString());
-        return new ResponseEntity<>(userService.update(userId, createUserDto), HttpStatus.OK);
+        return new ResponseEntity<>(userService.update(userId, createUserDto).block(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        return new ResponseEntity<>(userService.delete(id), HttpStatus.OK);
+        return new ResponseEntity<>(userService.delete(id).block(), HttpStatus.OK);
     }
 }
 
