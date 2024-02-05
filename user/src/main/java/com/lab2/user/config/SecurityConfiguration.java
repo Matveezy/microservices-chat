@@ -1,6 +1,6 @@
 package com.lab2.user.config;
 
-import com.lab2.user.service.UserService;
+import com.lab2.user.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
-    private final UserService userService;
+    private final UserDetailsServiceImpl userService;
     private final PasswordEncoder passwordEncoder;
 
     @Bean
