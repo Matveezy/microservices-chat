@@ -54,6 +54,44 @@ services:
       - NAME=${POSTGRES_DB}
       - USER=${POSTGRES_USER}
       - PASS=${POSTGRES_PASSWORD}
+  chat:
+    build:
+      context: .
+      args:
+        service: user
+    container_name: user
+    depends_on:
+      eureka:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    environment:
+      - CONFIGSERVER_URI=http://config:8888
+      - EUREKA_HOST=eureka
+      - HOST=db
+      - PORT=${PG_PORT}
+      - NAME=${POSTGRES_DB}
+      - USER=${POSTGRES_USER}
+      - PASS=${POSTGRES_PASSWORD}
+  message:
+    build:
+      context: .
+      args:
+        service: user
+    container_name: user
+    depends_on:
+      eureka:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    environment:
+      - CONFIGSERVER_URI=http://config:8888
+      - EUREKA_HOST=eureka
+      - HOST=db
+      - PORT=${PG_PORT}
+      - NAME=${POSTGRES_DB}
+      - USER=${POSTGRES_USER}
+      - PASS=${POSTGRES_PASSWORD}
 
   db:
     image: postgres:14
