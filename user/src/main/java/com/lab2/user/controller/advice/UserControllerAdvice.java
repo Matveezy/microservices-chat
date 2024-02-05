@@ -15,6 +15,6 @@ public class UserControllerAdvice {
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<String> handleAccessDenied(EntityNotFoundException e) {
-        return new ResponseEntity<>("Entity not found", HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
