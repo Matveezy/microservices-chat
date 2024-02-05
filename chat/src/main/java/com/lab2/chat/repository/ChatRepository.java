@@ -1,20 +1,28 @@
 package com.lab2.chat.repository;
 
 import com.lab2.chat.entity.Chat;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.lab2.chat.entity.ChatParticipant;
+import org.springframework.data.r2dbc.repository.Query;
+import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.stereotype.Repository;
-import java.util.Optional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 
 @Repository
-public interface ChatRepository extends JpaRepository<Chat, Long> {
+public interface ChatRepository extends R2dbcRepository<Chat, Long> {
 
-    boolean existsByName(String name);
+    Mono<Boolean> existsByName(String name);
 
-    boolean existsByNameAndIsPrivate(String name, boolean isPrivate);
+    Mono<Boolean> existsByNameAndIsPrivate(String name, boolean isPrivate);
 
-    Optional<Chat> findByNameAndIsPrivate(String name, boolean isPrivate);
+    Mono<Chat> findByNameAndIsPrivate(String name, boolean isPrivate);
 
-    Optional<Chat> findByIsPrivateAndUserIdsContaining(boolean isPrivate, Long userId);
+    @Query("SELECT c.* FROM chats c " +
+           "JOIN chat_participants cp ON c.id = cp.chat_id " +
+           "WHERE c.private = :isPrivate AND cp.user_id = :userId")
+    Flux<Chat> findByIsPrivateAndUserIds(boolean isPrivate, Long userId);
+
+    @Query("SELECT * FROM chat_participants WHERE chat_id = :chatId")
+    Flux<ChatParticipant> findParticipantsByChatId(Long chatId);
 }

@@ -19,6 +19,13 @@ spring:
           filters:
             - TokenPreFilter
             - RewritePath=/chat/?(?<segment>.*), /$\{segment}
+        - id: message-service
+          uri: lb://message
+          predicates:
+            - Path=/message/**
+          filters:
+            - TokenPreFilter
+            - RewritePath=/message/?(?<segment>.*), /$\{segment}
 #      discovery:
 #        locator:
 #          lower-case-service-id: true

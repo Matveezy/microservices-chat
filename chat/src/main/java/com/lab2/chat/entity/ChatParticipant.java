@@ -12,17 +12,13 @@ import org.springframework.data.relational.core.mapping.Table;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "chats")
-public class Chat {
+@Table(name = "chat_participants")
+public class ChatParticipant {
 
     @Id
-    @Column("id")
-    private Long id;
+    @Column("user_id")
+    private Long userId;
 
-    @Column("name")
-    private String name;
-
-    @Column("private")
-    private Boolean isPrivate;
-
+    @Column("chat_id")
+    private Long chatId;
 }

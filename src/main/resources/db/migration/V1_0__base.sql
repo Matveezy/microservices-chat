@@ -19,14 +19,15 @@ CREATE SEQUENCE chat_id_seq;
 CREATE TABLE chat_participants (
     user_id         BIGINT      NOT NULL,
     chat_id         BIGINT      NOT NULL,
-    PRIMARY KEY (user_id, chat_id),
-    CONSTRAINT fk_chat_participant_user_id
-        FOREIGN KEY (user_id)
-            REFERENCES users (id),
-    CONSTRAINT fk_chat_participant_chat_id
-            FOREIGN KEY (chat_id)
-                REFERENCES chats (id)
+    PRIMARY KEY (user_id, chat_id)
 );
+
+-- alter table chat_participants
+-- drop constraint fk_chat_participant_user_id;
+--
+-- alter table chat_participants
+-- drop constraint fk_chat_participant_chat_id;
+
 
 CREATE TABLE messages (
     id              BIGSERIAL   PRIMARY KEY,

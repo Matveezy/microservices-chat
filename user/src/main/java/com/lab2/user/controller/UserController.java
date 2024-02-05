@@ -3,6 +3,7 @@ package com.lab2.user.controller;
 import com.lab2.user.dto.AuthenticationRequest;
 import com.lab2.user.dto.CreateUserDto;
 import com.lab2.user.dto.UpdateUserDto;
+import com.lab2.user.dto.UserReadDto;
 import com.lab2.user.service.AuthenticationService;
 import com.lab2.user.service.UserService;
 import com.lab2.user.util.RequestAttributeNames;
@@ -23,7 +24,7 @@ public class UserController {
     private final AuthenticationService authenticationService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<?> findUserById(@PathVariable Long userId) {
+    public ResponseEntity<UserReadDto> findUserById(@PathVariable Long userId) {
         return new ResponseEntity<>(userService.findById(userId), HttpStatus.OK);
     }
 

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 import static com.lab2.chat.util.RequestAttributeNames.*;
@@ -25,7 +26,13 @@ public class ChatController {
     @GetMapping
     @PreAuthorize("permitAll()")
     public ResponseEntity<List<ChatResponseDto>> findAll() {
-        return new ResponseEntity<>(chatService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(chatService.findAll().collectList().block(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{chatId}")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<ChatResponseDto> findById(@PathVariable Long chatId) {
+        return new ResponseEntity<>(chatService.findById(chatId).block(), HttpStatus.OK);
     }
 
     @GetMapping("/group")
@@ -33,14 +40,14 @@ public class ChatController {
     public ResponseEntity<List<ChatResponseDto>> findUserGroupChats(HttpServletRequest httpServletRequest) {
         String userId = httpServletRequest.getHeader(USER_ID_ATTRIBUTE_NAME);
         if (userId == null) return ResponseEntity.badRequest().build();
-        return new ResponseEntity<>(chatService.findUserGroupChats(Long.valueOf(userId)), HttpStatus.OK);
+        return new ResponseEntity<>(chatService.findUserGroupChats(Long.valueOf(userId)).collectList().block(), HttpStatus.OK);
 
     }
 
     @PostMapping("/group")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<ChatResponseDto> createGroupChat(@RequestBody @Valid ChatRequestDto request) {
-        return new ResponseEntity<>(chatService.createGroupChat(request), HttpStatus.OK);
+        return new ResponseEntity<>(chatService.createGroupChat(request).block(), HttpStatus.OK);
     }
 
     @GetMapping("/private")
@@ -48,17 +55,17 @@ public class ChatController {
     public ResponseEntity<List<ChatResponseDto>> findUserPrivateChats(HttpServletRequest httpServletRequest) {
         String userId = httpServletRequest.getHeader(USER_ID_ATTRIBUTE_NAME);
         if (userId == null) return ResponseEntity.badRequest().build();
-        return new ResponseEntity<>(chatService.findUserPrivateChats(Long.valueOf(userId)), HttpStatus.OK);
+        return new ResponseEntity<>(chatService.findUserPrivateChats(Long.valueOf(userId)).collectList().block(), HttpStatus.OK);
 
     }
 
-    @GetMapping("/{withUserId}")
+    @GetMapping("/private/{withUserId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ChatResponseDto> findPrivateChat(HttpServletRequest httpServletRequest,
                                                            @PathVariable Long withUserId) {
         String userId = httpServletRequest.getHeader(USER_ID_ATTRIBUTE_NAME);
         if (userId == null) return ResponseEntity.badRequest().build();
-        return new ResponseEntity<>(chatService.findPrivateChat(Long.valueOf(userId), withUserId), HttpStatus.OK);
+        return new ResponseEntity<>(chatService.findPrivateChat(Long.valueOf(userId), withUserId).block(), HttpStatus.OK);
     }
 
     @PostMapping("/private/{withUserId}")
@@ -67,26 +74,26 @@ public class ChatController {
                                                              @PathVariable Long withUserId) {
         String userId = httpServletRequest.getHeader(USER_ID_ATTRIBUTE_NAME);
         if (userId == null) return ResponseEntity.badRequest().build();
-        return new ResponseEntity<>(chatService.createPrivateChat(Long.valueOf(userId), withUserId), HttpStatus.OK);
+        return new ResponseEntity<>(chatService.createPrivateChat(Long.valueOf(userId), withUserId).block(), HttpStatus.OK);
     }
 
     @PutMapping("/{chatId}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-    public ResponseEntity<ChatResponseDto> update(@PathVariable Long chatId,
+    public ResponseEntity<ChatResponseDto> updateGroupChatName(@PathVariable Long chatId,
                                                   @RequestBody @Valid ChatRequestDto request) {
-        return new ResponseEntity<>(chatService.update(chatId, request), HttpStatus.OK);
+        return new ResponseEntity<>(chatService.updateGroupChatName(chatId, request).block(), HttpStatus.OK);
     }
 
     @PutMapping("/participants/{chatId}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<ChatResponseDto> updateParticipants(@PathVariable Long chatId,
                                                               @RequestBody @Valid ChatUsersRequestDto chatUsersRequest) {
-        return new ResponseEntity<>(chatService.updateParticipants(chatId, chatUsersRequest), HttpStatus.OK);
+        return new ResponseEntity<>(chatService.updateParticipants(chatId, chatUsersRequest).block(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{chatId}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deleteChat(@PathVariable Long chatId) {
-        return new ResponseEntity<>(chatService.delete(chatId), HttpStatus.OK);
+        return new ResponseEntity<>(chatService.delete(chatId).block(), HttpStatus.OK);
     }
 }
