@@ -17,6 +17,7 @@
         <module>eureka</module>
         <module>chat</module>
         <module>user</module>
+        <module>message</module>
         <module>gateway</module>
     </modules>
 
