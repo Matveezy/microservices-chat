@@ -4,6 +4,8 @@ import com.lab2.chat.dto.ChatRequestDto;
 import com.lab2.chat.dto.ChatResponseDto;
 import com.lab2.chat.dto.ChatUsersRequestDto;
 import com.lab2.chat.service.ChatService;
+import feign.FeignException;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +43,6 @@ public class ChatController {
         String userId = httpServletRequest.getHeader(USER_ID_ATTRIBUTE_NAME);
         if (userId == null) return ResponseEntity.badRequest().build();
         return new ResponseEntity<>(chatService.findUserGroupChats(Long.valueOf(userId)).collectList().block(), HttpStatus.OK);
-
     }
 
     @PostMapping("/group")
@@ -95,5 +96,10 @@ public class ChatController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deleteChat(@PathVariable Long chatId) {
         return new ResponseEntity<>(chatService.delete(chatId).block(), HttpStatus.OK);
+    }
+
+    @ExceptionHandler({FeignException.class})
+    public ResponseEntity<?> handleUnexpectedServiceExceptions() {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Couldn't make call for external service.");
     }
 }

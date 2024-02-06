@@ -4,6 +4,8 @@ import com.lab2.message.dto.MessageRequestDto;
 import com.lab2.message.dto.MessageResponseDto;
 import com.lab2.message.dto.MessageResponseForReadingDto;
 import com.lab2.message.service.MessageService;
+import feign.FeignException;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +72,11 @@ public class MessageController {
         Long userId = extractUserId(httpServletRequest);
         messageService.deleteMessage(userId, messageId);
         return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler({FeignException.class})
+    public ResponseEntity<?> handleUnexpectedServiceExceptions() {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Couldn't make call for external service.");
     }
 
 }
