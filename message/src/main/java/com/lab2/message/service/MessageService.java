@@ -7,6 +7,7 @@ import com.lab2.message.dto.MessageResponseForReadingDto;
 import com.lab2.message.entity.Message;
 import com.lab2.message.entity.MessageDelivery;
 import com.lab2.message.entity.MessageDeliveryKey;
+import com.lab2.message.exception.ChatNotFoundException;
 import com.lab2.message.exception.ChatPermissionException;
 import com.lab2.message.exception.MessagePermissionException;
 import com.lab2.message.feign.ChatServiceClient;
@@ -118,8 +119,8 @@ public class MessageService {
 
     private ChatResponseDto getChat(Long chatId) {
         ResponseEntity<Optional<ChatResponseDto>> chatByIdOptional = chatServiceClient.findById(chatId);
-        if (Objects.requireNonNull(chatByIdOptional.getBody()).isEmpty())
-            throw new EntityNotFoundException("Chat with id " + chatId + " doesn't exist!");
+        if (!chatByIdOptional.hasBody())
+            throw new ChatNotFoundException("Chat with id " + chatId + " doesn't exist!");
         return chatByIdOptional.getBody().get();
     }
 

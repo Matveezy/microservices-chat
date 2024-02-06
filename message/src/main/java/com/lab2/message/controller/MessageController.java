@@ -49,7 +49,7 @@ public class MessageController {
 
     @GetMapping("/chats/{chatId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<MessageResponseForReadingDto>> readMessage(HttpServletRequest httpServletRequest,
+    public ResponseEntity<List<MessageResponseForReadingDto>> readMessagesInChat(HttpServletRequest httpServletRequest,
                                                                           @PathVariable Long chatId) {
         Long userId = extractUserId(httpServletRequest);
         return new ResponseEntity<>(messageService.readMessage(userId, chatId), HttpStatus.OK);

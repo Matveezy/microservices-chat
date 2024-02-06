@@ -80,7 +80,7 @@ public class ChatController {
     @PutMapping("/{chatId}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<ChatResponseDto> updateGroupChatName(@PathVariable Long chatId,
-                                                  @RequestBody @Valid ChatRequestDto request) {
+                                                               @RequestBody @Valid ChatRequestDto request) {
         return new ResponseEntity<>(chatService.updateGroupChatName(chatId, request).block(), HttpStatus.OK);
     }
 

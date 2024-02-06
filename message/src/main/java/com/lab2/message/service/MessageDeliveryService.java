@@ -37,9 +37,11 @@ public class MessageDeliveryService {
     @Transactional
     public void updateMessageDeliveriesIfNecessary(List<Message> receivedMessages, Long userId) {
         receivedMessages.stream()
-                .filter(message -> !message.getSenderId().equals(userId))
+                .filter(message -> !(message.getSenderId().equals(userId)))
                 .forEach(message -> {
+                    System.out.println(message);
                     Optional<MessageDelivery> messageDeliveryOptional = messageDeliveryRepository.findById(MessageDeliveryKey.builder().receiverId(userId).messageId(message.getId()).build());
+                    System.out.println(messageDeliveryOptional.get());
                     messageDeliveryOptional.map(messageDelivery -> {
                         if (!messageDelivery.getDelivered()) {
                             messageDelivery.setDelivered(true);
