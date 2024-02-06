@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${HOST}:${PORT}/${NAME}
+    username: ${USER}
+    password: ${PASS}
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+        hbm2ddl.auto: none
