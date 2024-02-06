@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset matthew:1
+--changeset admin:1
 CREATE TABLE users
 (
     id       BIGSERIAL PRIMARY KEY,

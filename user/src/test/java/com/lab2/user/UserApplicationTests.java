@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestConstructor;
@@ -36,6 +37,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureMockMvc
 @RequiredArgsConstructor
 @Sql(value = "classpath:sql/init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class UserApplicationTests {
 
     private final UserRepository userRepository;
@@ -137,5 +139,9 @@ class UserApplicationTests {
         dynamicPropertyRegistry.add("spring.datasource.url", container::getJdbcUrl);
         dynamicPropertyRegistry.add("spring.datasource.username", container::getUsername);
         dynamicPropertyRegistry.add("spring.datasource.password", container::getPassword);
+
+        dynamicPropertyRegistry.add("spring.liquibase.url", container::getJdbcUrl);
+        dynamicPropertyRegistry.add("spring.liquibase.user", container::getUsername);
+        dynamicPropertyRegistry.add("spring.liquibase.password", container::getPassword);
     }
 }
